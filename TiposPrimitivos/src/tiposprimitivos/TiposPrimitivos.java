@@ -1,23 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
+
 package tiposprimitivos;
 
-/**
- *
- * @author henrique.canhadas
- */
+import java.util.Scanner;
+
 public class TiposPrimitivos {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
-        float nota = 8.5f;
+        
+        System.out.print("Digite seu nome:");
+        Scanner teclado = new Scanner(System.in);
+        String nome = teclado.nextLine();
+        
+        System.out.print("Digite sua nota:");
+        float nota = teclado.nextFloat();
+        
         System.out.println("Sua nota e:"+nota);
-        System.out.printf("Sua nota seria de:%.2f", nota);
+        System.out.printf("Sua nota %s seria de:%.2f \n", nome,nota);
+        
+        int idade = 20;
+        String valor = Integer.toString(idade);
+        System.out.println(valor);
+        
+        String quantidade = "40";
+        
+        int numero = Integer.parseInt(quantidade);
+        
+        System.out.println(numero);
+        
     }
     
 }
