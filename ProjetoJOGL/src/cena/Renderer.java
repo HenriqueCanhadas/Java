@@ -13,8 +13,8 @@ import input.KeyBoard;
  */
 public class Renderer {
     private static GLWindow window = null;
-    public static int screenWidth = 600;  //1280
-    public static int screenHeight = 600; //960 
+    public static int screenWidth = 500;  //1280
+    public static int screenHeight = 500; //960 
 
     //Cria a janela de rendeziração do JOGL
     public static void init(){        

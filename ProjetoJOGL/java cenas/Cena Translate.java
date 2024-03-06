@@ -37,8 +37,6 @@ public class Cena implements GLEventListener{
         */           
         //INICIO DA ATIVIDADE
         
-        //DESENHANDO A CASA
-        
         //DESENHAR GRADE
        
         gl.glColor3f(0.8f, 0.8f, 0.8f); // Cor cinza claro
@@ -59,8 +57,10 @@ public class Cena implements GLEventListener{
             gl.glVertex2f(x, 1.0f);
             gl.glEnd();
         }
+                
+        //LIHAS
         
-        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor vermelha
+        gl.glColor3f(1.0f, 0.0f, 0.0f); // cor vermelha
         gl.glLineWidth(3.0f); // largura da linha
         
         gl.glBegin(GL2.GL_LINES);
@@ -69,7 +69,7 @@ public class Cena implements GLEventListener{
         gl.glVertex2f(0.0f, 0.0f); // ponto inicial da segunda linha
         gl.glVertex2f(0.0f, -1.0f); // ponto final da segunda linha
         
-        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor vermelha
+        gl.glColor3f(1.0f, 0.0f, 0.0f); // cor vermelha
         gl.glLineWidth(3.0f); // largura da linha
         
         gl.glBegin(GL2.GL_LINES);
@@ -78,44 +78,47 @@ public class Cena implements GLEventListener{
         gl.glVertex2f(0.0f, 0.0f); // ponto inicial da segunda linha
         gl.glVertex2f(1.0f, 0.0f); // ponto final da segunda linha
         gl.glEnd();
-        gl.glFlush();
         
-        //ESTRELA VERDE
+        //PONTOS
         
-        gl.glColor3f(0.0f, 1.0f, 0.0f); // cor verde
-        gl.glBegin(GL2.GL_POLYGON);
-        gl.glVertex2f(-0.2f, 0.4f);
-        gl.glVertex2f(-0.7f, 0.4f);
-        gl.glVertex2f(-0.3f, 0.2f);
-        gl.glVertex2f(-0.7f, -0.5f);
-        gl.glVertex2f(0.0f, -0.1f);
-        gl.glVertex2f(0.7f, -0.5f);
-        gl.glVertex2f(0.3f, 0.2f);
-        gl.glVertex2f(0.7f, 0.4f);
-        gl.glVertex2f(0.2f, 0.4f);
-        gl.glVertex2f(0.0f, 0.8f);
+        gl.glColor3f(1.0f, 0.0f, 0.0f); // cor azul
+        gl.glPointSize(20.0f); // tamanho dos pontos
+        
+        gl.glBegin(GL2.GL_POINTS);
+        gl.glVertex2f(-0.2f, 0.0f); // ponto 1
         gl.glEnd();
         
+        gl.glTranslatef(0.2f, 0.9f, 0);
+        gl.glColor3f(0, 0, 1); // Define a cor azul antes de desenhar o triângulo
+        gl.glPointSize(20.0f); // tamanho dos pontos
         
-        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor verde
-        gl.glPushMatrix();
-            gl.glRotatef(80, 0, 1, 0);
-            gl.glBegin(GL2.GL_POLYGON);
-            gl.glVertex2f(-0.2f, 0.4f);
-            gl.glVertex2f(-0.7f, 0.4f);
-            gl.glVertex2f(-0.3f, 0.2f);
-            gl.glVertex2f(-0.7f, -0.5f);
-            gl.glVertex2f(0.0f, -0.1f);
-            gl.glVertex2f(0.7f, -0.5f);
-            gl.glVertex2f(0.3f, 0.2f);
-            gl.glVertex2f(0.7f, 0.4f);
-            gl.glVertex2f(0.2f, 0.4f);
-            gl.glVertex2f(0.0f, 0.8f);
+        gl.glBegin(GL2.GL_POINTS);
+            gl.glVertex2f(-0.2f, 0.0f);
         gl.glEnd();
-        gl.glPopMatrix();
+
         
+        //TESTE TRIANGULO TRANSLAÇÃO
+        gl.glTranslatef(-0.2f, -0.9f, 0);
+        gl.glColor3f(1, 0, 0);
         
-        gl.glFlush();
+        gl.glBegin(GL2.GL_TRIANGLES);
+            gl.glVertex2f(0.0f, 0.0f);
+            gl.glVertex2f(0.4f, 0.0f);
+            gl.glVertex2f(0.4f, 0.4f);
+        gl.glEnd();
+        
+        gl.glTranslatef(0.5f, 0.5f, 0);
+        gl.glColor3f(0, 0, 1);
+        
+        gl.glBegin(GL2.GL_TRIANGLES);
+            gl.glVertex2f(0.0f, 0.0f);
+            gl.glVertex2f(0.4f, 0.0f);
+            gl.glVertex2f(0.4f, 0.4f);
+        gl.glEnd();
+            
+        
+           
+        gl.glFlush();    
         
     }
 
