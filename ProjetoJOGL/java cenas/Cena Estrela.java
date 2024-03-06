@@ -78,25 +78,42 @@ public class Cena implements GLEventListener{
         gl.glVertex2f(0.0f, 0.0f); // ponto inicial da segunda linha
         gl.glVertex2f(1.0f, 0.0f); // ponto final da segunda linha
         gl.glEnd();
+        gl.glFlush();
         
-        gl.glColor3f(1.0f, 0.5f, 1.0f); // cor vermelha
-        gl.glLineWidth(3.0f); // largura da linha
+        //ESTRELA VERDE
         
-        gl.glBegin(GL2.GL_LINE_LOOP);
-        gl.glVertex2f(0.0f, 0.0f); // ponto inicial da primeira linha
-        gl.glVertex2f(0.0f, 0.6f); // ponto final da primeira linha
-        gl.glVertex2f(0.2f, 0.6f); // ponto final da primeira linha
-        gl.glVertex2f(0.2f, 0.4f); // ponto final da segunda linha
-        gl.glVertex2f(0.4f, 0.4f); // ponto final da segunda linha
-        gl.glVertex2f(0.4f, 0.6f); // ponto final da terceira linha
-        gl.glVertex2f(0.6f, 0.6f); // ponto final da terceria linha
-        gl.glVertex2f(0.6f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.4f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.4f, 0.2f); // ponto final da terceria linha
-        gl.glVertex2f(0.2f, 0.2f); // ponto final da terceria linha
-        gl.glVertex2f(0.2f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto final da terceria linha
-        gl.glEnd();  
+        gl.glColor3f(0.0f, 1.0f, 0.0f); // cor verde
+        gl.glBegin(GL2.GL_POLYGON);
+        gl.glVertex2f(-0.2f, 0.4f);
+        gl.glVertex2f(-0.7f, 0.4f);
+        gl.glVertex2f(-0.3f, 0.2f);
+        gl.glVertex2f(-0.7f, -0.5f);
+        gl.glVertex2f(0.0f, -0.1f);
+        gl.glVertex2f(0.7f, -0.5f);
+        gl.glVertex2f(0.3f, 0.2f);
+        gl.glVertex2f(0.7f, 0.4f);
+        gl.glVertex2f(0.2f, 0.4f);
+        gl.glVertex2f(0.0f, 0.8f);
+        gl.glEnd();
+        
+        
+        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor verde
+        gl.glPushMatrix();
+            gl.glRotatef(80, 0, 1, 0);
+            gl.glBegin(GL2.GL_POLYGON);
+            gl.glVertex2f(-0.2f, 0.4f);
+            gl.glVertex2f(-0.7f, 0.4f);
+            gl.glVertex2f(-0.3f, 0.2f);
+            gl.glVertex2f(-0.7f, -0.5f);
+            gl.glVertex2f(0.0f, -0.1f);
+            gl.glVertex2f(0.7f, -0.5f);
+            gl.glVertex2f(0.3f, 0.2f);
+            gl.glVertex2f(0.7f, 0.4f);
+            gl.glVertex2f(0.2f, 0.4f);
+            gl.glVertex2f(0.0f, 0.8f);
+        gl.glEnd();
+        gl.glPopMatrix();
+        
         
         gl.glFlush();
         
