@@ -1,138 +1,116 @@
 package cena;
 
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
-/**
- *
- * @author Kakugawa
- */
-public class Cena implements GLEventListener{    
-    private float xMin, xMax, yMin, yMax, zMin, zMax;    
-    GLU glu;
-    
+import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.awt.TextRenderer;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.io.IOException;
+import java.util.Random;
+
+import static validations.Collisions.*;
+
+public class Cena implements GLEventListener {
+    private float xMin, xMax, yMin, yMax, zMin, zMax;
+    private int paddleWidth = 10;
+    private int paddleHeight = 80;
+    public int paddle1Y = 0;
+    public int paddle2Y = 0;
+    private int ballSize = 10;
+    private int ballX = 0;
+    private int ballY = 0;
+    private int ballDX = 2;
+    private int ballDY = 2;
+    private int player1Score = 0;
+    private int computer = 0;
+    private TextRenderer textRenderer;
+    private GLU glu;
+    private Random rand = new Random();
+
+    // Adicionado para suporte à textura
+    private Texture texturaBola;
+
+    public Cena() {
+        xMin = -100;
+        xMax = 100;
+        yMin = -100;
+        yMax = 100;
+        ballX = (int) ((xMax - xMin) / 2);
+        ballY = (int) ((yMax - yMin) / 2);
+        textRenderer = new TextRenderer(new Font("Arial", Font.BOLD, 24));
+        glu = new GLU();
+    }
+
     @Override
     public void init(GLAutoDrawable drawable) {
-        //dados iniciais da cena
-        glu = new GLU();
-        //Estabelece as coordenadas do SRU (Sistema de Referencia do Universo)
-        xMin = yMin = zMin = -1;
-        xMax = yMax = zMax = 1;        
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glClearColor(0, 0, 0, 1);
+
+        // Carrega a textura da bola
+        try {
+            texturaBola = TextureIO.newTexture(getClass().getResource("/caminho/para/sua/textura.jpg"), true, "jpg");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
-    public void display(GLAutoDrawable drawable) {  
-        //obtem o contexto Opengl
-        GL2 gl = drawable.getGL().getGL2();                
-        //define a cor da janela (R, G, G, alpha)
-        gl.glClearColor(1, 1, 1,0);        
-        //limpa a janela com a cor especificada
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);       
-        gl.glLoadIdentity(); //lê a matriz identidade
-        
-        /*
-            desenho da cena        
-        *
-        */           
-        //INICIO DA ATIVIDADE
-        
-        //DESENHANDO A CASA
-        
-        //DESENHAR GRADE
-       
-        gl.glColor3f(0.8f, 0.8f, 0.8f); // Cor cinza claro
-        gl.glLineWidth(1.0f); // Largura da linha
-        
-        // Desenhar linhas horizontais
-        for (float y = -1.0f; y <= 1.0f; y += 0.1f) {
-            gl.glBegin(GL2.GL_LINES);
-            gl.glVertex2f(-1.0f, y);
-            gl.glVertex2f(1.0f, y);
-            gl.glEnd();
+    public void display(GLAutoDrawable drawable) {
+        GL2 gl = drawable.getGL().getGL2();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+
+        gl.glLoadIdentity();
+        gl.glOrtho(xMin, xMax, yMin, yMax, -1, 1);
+        gl.glColor3f(1, 1, 1);
+
+        gl.glRecti(-95, paddle1Y - paddleHeight / 2, -95 + paddleWidth, paddle1Y + paddleHeight / 2);
+        gl.glRecti(95 - paddleWidth, paddle2Y - paddleHeight / 2, 95, paddle2Y + paddleHeight / 2);
+
+        // Desenha a bola com textura
+        if (texturaBola != null) {
+            texturaBola.enable(gl);
+            texturaBola.bind(gl);
+            GLUquadric quadric = glu.gluNewQuadric();
+            glu.gluQuadricTexture(quadric, true);
+            glu.gluQuadricDrawStyle(quadric, GLU.GLU_FILL);
+            glu.gluQuadricNormals(quadric, GLU.GLU_SMOOTH);
+            gl.glPushMatrix();
+            gl.glTranslatef(ballX, ballY, 0);
+            glu.gluSphere(quadric, ballSize / 2.0, 20, 20);
+            gl.glPopMatrix();
+            texturaBola.disable(gl);
         }
-        
-        // Desenhar linhas verticais
-        for (float x = -1.0f; x <= 1.0f; x += 0.1f) {
-            gl.glBegin(GL2.GL_LINES);
-            gl.glVertex2f(x, -1.0f);
-            gl.glVertex2f(x, 1.0f);
-            gl.glEnd();
-        }
-        
-        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor vermelha
-        gl.glLineWidth(3.0f); // largura da linha
-        
-        gl.glBegin(GL2.GL_LINES);
-        gl.glVertex2f(-1.0f, 0.0f); // ponto inicial da primeira linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto final da primeira linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto inicial da segunda linha
-        gl.glVertex2f(0.0f, -1.0f); // ponto final da segunda linha
-        
-        gl.glColor3f(0.0f, 0.0f, 1.0f); // cor vermelha
-        gl.glLineWidth(3.0f); // largura da linha
-        
-        gl.glBegin(GL2.GL_LINES);
-        gl.glVertex2f(0.0f, 1.0f); // ponto inicial da primeira linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto final da primeira linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto inicial da segunda linha
-        gl.glVertex2f(1.0f, 0.0f); // ponto final da segunda linha
-        gl.glEnd();
-        
-        gl.glColor3f(1.0f, 0.5f, 1.0f); // cor vermelha
-        gl.glLineWidth(3.0f); // largura da linha
-        
-        gl.glBegin(GL2.GL_LINE_LOOP);
-        gl.glVertex2f(0.0f, 0.0f); // ponto inicial da primeira linha
-        gl.glVertex2f(0.0f, 0.6f); // ponto final da primeira linha
-        gl.glVertex2f(0.2f, 0.6f); // ponto final da primeira linha
-        gl.glVertex2f(0.2f, 0.4f); // ponto final da segunda linha
-        gl.glVertex2f(0.4f, 0.4f); // ponto final da segunda linha
-        gl.glVertex2f(0.4f, 0.6f); // ponto final da terceira linha
-        gl.glVertex2f(0.6f, 0.6f); // ponto final da terceria linha
-        gl.glVertex2f(0.6f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.4f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.4f, 0.2f); // ponto final da terceria linha
-        gl.glVertex2f(0.2f, 0.2f); // ponto final da terceria linha
-        gl.glVertex2f(0.2f, 0.0f); // ponto final da terceria linha
-        gl.glVertex2f(0.0f, 0.0f); // ponto final da terceria linha
-        gl.glEnd();  
-        
-        gl.glFlush();
-        
+
+        String scoreText = "Score: \nPlayer:" + player1Score + " - Computer:" + computer;
+        textRenderer.beginRendering(drawable.getSurfaceWidth(), drawable.getSurfaceHeight());
+        textRenderer.setColor(Color.WHITE);
+        textRenderer.draw(scoreText, 10, drawable.getSurfaceHeight() - 30);
+        textRenderer.endRendering();
+
+        update();
+    }
+
+    private void update() {
+        // Lógica de atualização simplificada para brevidade
+        ballX += ballDX;
+        ballY += ballDY;
+        // Implemente a lógica de atualização e detecção de colisão aqui
     }
 
     @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {    
-        //obtem o contexto grafico Opengl
-        GL2 gl = drawable.getGL().getGL2();  
-        
-        //evita a divisão por zero
-        if(height == 0) height = 1;
-        //calcula a proporção da janela (aspect ratio) da nova janela
-        float aspect = (float) width / height;
-        
-        //seta o viewport para abranger a janela inteira
-        gl.glViewport(0, 0, width, height);
-                
-        //ativa a matriz de projeção
-        gl.glMatrixMode(GL2.GL_PROJECTION);      
-        gl.glLoadIdentity(); //lê a matriz identidade
-        
-        //Projeção ortogonal
-        //true:   aspect >= 1 configura a altura de -1 para 1 : com largura maior
-        //false:  aspect < 1 configura a largura de -1 para 1 : com altura maior
-        if(width >= height)            
-            gl.glOrtho(xMin * aspect, xMax * aspect, yMin, yMax, zMin, zMax);
-        else        
-            gl.glOrtho(xMin, xMax, yMin / aspect, yMax / aspect, zMin, zMax);
-                
-        //ativa a matriz de modelagem
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity(); //lê a matriz identidade
-        System.out.println("Reshape: " + width + ", " + height);
-    }    
-       
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        // Implementação do método reshape
+    }
+
     @Override
-    public void dispose(GLAutoDrawable drawable) {}         
+    public void dispose(GLAutoDrawable drawable) {
+        // Chamado quando o drawable é destruído
+    }
 }
